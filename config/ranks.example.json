@@ -1,0 +1,50 @@
+{
+  "$comment": "Copy to config/ranks.json to customize. 'level' drives permission inheritance: a rank can run any command whose required level is <= the rank's level. 'inherits' is documentation only; numeric level is what's enforced.",
+
+  "defaultRank": "member",
+
+  "ranks": {
+    "member": {
+      "level": 0,
+      "display": "&7Member",
+      "inherits": [],
+      "description": "Default rank for every player."
+    },
+    "vip": {
+      "level": 10,
+      "display": "&aVIP",
+      "inherits": ["member"],
+      "description": "Donors / trusted players. Higher economy limits."
+    },
+    "helper": {
+      "level": 20,
+      "display": "&bHelper",
+      "inherits": ["vip"],
+      "description": "Can answer tickets and view reports."
+    },
+    "moderator": {
+      "level": 30,
+      "display": "&2Moderator",
+      "inherits": ["helper"],
+      "description": "Chat moderation: mute, warn, slowmode, purge."
+    },
+    "administrator": {
+      "level": 40,
+      "display": "&cAdmin",
+      "inherits": ["moderator"],
+      "description": "Full moderation plus broadcast and config viewing."
+    },
+    "developer": {
+      "level": 50,
+      "display": "&dDeveloper",
+      "inherits": ["administrator"],
+      "description": "Can reload modules and run diagnostics."
+    },
+    "owner": {
+      "level": 100,
+      "display": "&4Owner",
+      "inherits": ["developer"],
+      "description": "Unrestricted. Includes eval/exec/shutdown."
+    }
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "$comment": "Copy this file to config/config.json and edit it. Values in .env override the matching fields here (server.host/port/username/version, ai.apiKey/model).",
+
+  "server": {
+    "host": "play.example.net",
+    "port": 25565,
+    "username": "SupportBot",
+    "version": false,
+    "auth": "offline"
+  },
+
+  "reconnect": {
+    "enabled": true,
+    "initialDelayMs": 5000,
+    "maxDelayMs": 60000,
+    "backoffFactor": 2,
+    "maxAttempts": 0,
+    "rejoinOnKick": true,
+    "rejoinOnDeath": true
+  },
+
+  "bot": {
+    "prefix": "!",
+    "respondInWhispers": true,
+    "respondInChat": true,
+    "commandReplyMode": "auto",
+    "maxMessageLength": 256,
+    "messageDelayMs": 800,
+    "owners": ["YourMinecraftName"],
+    "maintenance": false,
+    "antiAfk": true,
+    "logCommandUsage": true
+  },
+
+  "economy": {
+    "enabled": true,
+    "currencyName": "coins",
+    "currencySymbol": "$",
+    "startingBalance": 100,
+    "dailyReward": 250,
+    "dailyCooldownHours": 22,
+    "workMin": 50,
+    "workMax": 200,
+    "workCooldownMinutes": 30,
+    "gambleMinBet": 10,
+    "gambleMaxBet": 10000,
+    "gambleWinChance": 0.45
+  },
+
+  "cooldowns": {
+    "defaultSeconds": 3,
+    "globalUserSeconds": 1
+  },
+
+  "antiSpam": {
+    "enabled": true,
+    "maxMessagesPerWindow": 5,
+    "windowMs": 4000,
+    "muteSeconds": 30,
+    "exemptRankLevel": 30
+  },
+
+  "teleport": {
+    "$comment": "The bot must have permission to run these commands (usually OP). {player}=who is being teleported, {target}=destination player, {x}{y}{z}=coordinates. Adapt the formats to your server plugin (vanilla, EssentialsX, etc.).",
+    "enabled": true,
+    "tpPlayerToPlayer": "/tp {player} {target}",
+    "tpToCoords": "/tp {player} {x} {y} {z}",
+    "maxHomesPerPlayer": 3,
+    "requestTimeoutSeconds": 60
+  },
+
+  "moderation": {
+    "useServerCommands": true,
+    "kickCommandFormat": "/kick {target} {reason}",
+    "muteCommandFormat": "/mute {target} {duration} {reason}",
+    "unmuteCommandFormat": "/unmute {target}",
+    "maxWarningsBeforeKick": 3
+  },
+
+  "ai": {
+    "enabled": true,
+    "provider": "openrouter",
+    "apiKey": "",
+    "model": "openai/gpt-4o-mini",
+    "baseUrl": "https://openrouter.ai/api/v1/chat/completions",
+    "maxTokens": 300,
+    "temperature": 0.7,
+    "systemPrompt": "You are a friendly, concise in-game Minecraft assistant. Keep answers short (1-3 sentences) because they are shown in Minecraft chat.",
+    "cooldownSeconds": 10,
+    "permissionLevel": 0
+  },
+
+  "logging": {
+    "level": "info",
+    "toFile": true,
+    "directory": "logs",
+    "categories": {
+      "chat": true,
+      "joinLeave": true,
+      "command": true,
+      "economy": true,
+      "moderation": true,
+      "ticket": true
+    }
+  },
+
+  "support": {
+    "ticketCategories": ["general", "bug", "report", "appeal", "other"],
+    "staffPingRankLevel": 20,
+    "faq": [
+      { "q": "how do i claim land", "a": "Use a golden shovel and right-click two corners to claim land." },
+      { "q": "how do i set home", "a": "Use !sethome <name>, then !home <name> to teleport back." },
+      { "q": "how do i make money", "a": "Use !daily once a day, !work every 30 minutes, or !gamble to risk it." }
+    ]
+  },
+
+  "database": {
+    "type": "json",
+    "directory": "data",
+    "autosaveMs": 15000,
+    "backupDirectory": "backups"
+  }
+}

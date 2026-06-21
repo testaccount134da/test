@@ -1,0 +1,33 @@
+{
+  "name": "minecraft-support-bot",
+  "version": "1.0.0",
+  "description": "A production-ready support, utility, moderation, economy and entertainment bot for offline-mode (cracked) Minecraft servers. Works like a Discord bot, but lives in Minecraft chat.",
+  "type": "module",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "setup": "node scripts/setup.js",
+    "backup": "node scripts/backup.js"
+  },
+  "keywords": [
+    "minecraft",
+    "bot",
+    "mineflayer",
+    "cracked",
+    "offline-mode",
+    "economy",
+    "moderation",
+    "support"
+  ],
+  "author": "minecraft-support-bot",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mineflayer": "^4.20.1",
+    "node-fetch": "^3.3.2"
+  }
+}
