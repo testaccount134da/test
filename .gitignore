@@ -9,6 +9,10 @@ data/
 logs/
 backups/
 
+# Microsoft auth token cache (contains login tokens — never commit)
+.minecraft-auth/
+nmp-cache/
+
 # Local config overrides (keep the *.example.json files committed)
 config/config.json
 config/ranks.json

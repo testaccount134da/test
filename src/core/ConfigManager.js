@@ -69,6 +69,8 @@ export default class ConfigManager {
     if (env.MC_PORT) c.server.port = Number(env.MC_PORT);
     if (env.MC_USERNAME) c.server.username = env.MC_USERNAME;
     if (env.MC_VERSION) c.server.version = env.MC_VERSION;
+    if (env.MC_AUTH) c.server.auth = env.MC_AUTH;
+    if (env.MC_PROFILES_FOLDER) c.server.profilesFolder = env.MC_PROFILES_FOLDER;
 
     c.ai = c.ai || {};
     if (env.OPENROUTER_API_KEY) c.ai.apiKey = env.OPENROUTER_API_KEY;
@@ -80,6 +82,13 @@ export default class ConfigManager {
     const s = this.config.server || {};
     if (!s.host) throw new Error('config.server.host is required (set MC_HOST or edit config.json).');
     if (!s.username) throw new Error('config.server.username is required (set MC_USERNAME or edit config.json).');
+
+    // Normalise + validate the auth mode.
+    s.auth = (s.auth ?? 'offline').toLowerCase();
+    if (!['offline', 'microsoft'].includes(s.auth)) {
+      throw new Error(`config.server.auth must be "offline" or "microsoft" (got "${s.auth}").`);
+    }
+    this.config.server = s;
     if (!this.config.bot?.prefix) {
       this.config.bot = this.config.bot || {};
       this.config.bot.prefix = '!';

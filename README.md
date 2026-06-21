@@ -17,6 +17,8 @@ plugin architecture, and an optional built-in AI assistant powered by
 
 - **Always online** — auto-connect, auto-reconnect with exponential backoff,
   auto-rejoin after kicks/crashes/deaths, and anti-AFK.
+- **Flexible auth** — `offline` mode for cracked servers, or `microsoft` mode
+  for premium accounts (one-time device-code sign-in, then cached).
 - **Command framework** — every command declares name, description, aliases,
   usage, cooldown, permission level and category.
 - **Permission system** — 7 inheriting ranks (Member → Owner) with anti-escalation
@@ -75,14 +77,16 @@ All settings live in `config/config.json` (copied from
 `config/config.example.json`). Secrets and connection details can also be set in
 `.env`, which **overrides** the JSON file:
 
-| `.env` variable      | Overrides                |
-|----------------------|--------------------------|
-| `MC_HOST`            | `server.host`            |
-| `MC_PORT`            | `server.port`            |
-| `MC_USERNAME`        | `server.username`        |
-| `MC_VERSION`         | `server.version`         |
-| `OPENROUTER_API_KEY` | `ai.apiKey`              |
-| `OPENROUTER_MODEL`   | `ai.model`               |
+| `.env` variable       | Overrides                |
+|-----------------------|--------------------------|
+| `MC_HOST`             | `server.host`            |
+| `MC_PORT`             | `server.port`            |
+| `MC_USERNAME`         | `server.username`        |
+| `MC_VERSION`          | `server.version`         |
+| `MC_AUTH`             | `server.auth`            |
+| `MC_PROFILES_FOLDER`  | `server.profilesFolder`  |
+| `OPENROUTER_API_KEY`  | `ai.apiKey`              |
+| `OPENROUTER_MODEL`    | `ai.model`               |
 
 Key fields to set on first run:
 
@@ -95,6 +99,42 @@ Key fields to set on first run:
 
 > **Owners** listed in `bot.owners` always have the `owner` rank, so you can
 > never lock yourself out.
+
+### Authentication: offline vs Microsoft
+
+The bot supports two login modes via `server.auth` (or `MC_AUTH`):
+
+- **`offline`** (default) — for cracked / offline-mode servers. `username` can be
+  any name; no password or sign-in is required.
+- **`microsoft`** — for **premium** accounts on servers in online mode. Set
+  `username` to your Microsoft email and `auth` to `microsoft`. On first launch
+  the console prints a **device code**:
+
+  ```
+  WARN [Auth]   MICROSOFT SIGN-IN REQUIRED
+  WARN [Auth]   1. Open: https://www.microsoft.com/link
+  WARN [Auth]   2. Enter code: ABCD-EFGH
+  ```
+
+  Open the link, enter the code, and approve the login. The token is cached in
+  `server.profilesFolder` (default `.minecraft-auth/`, git-ignored), so all
+  later starts and reconnects sign in **silently** — you only do this once.
+
+Example for a premium account:
+
+```jsonc
+{
+  "server": {
+    "host": "play.example.net",
+    "username": "you@example.com",
+    "auth": "microsoft",
+    "profilesFolder": ".minecraft-auth"
+  }
+}
+```
+
+> Microsoft auth uses `prismarine-auth` (bundled with mineflayer) — no extra
+> install needed.
 
 Ranks are defined in `config/ranks.json` (copied from `ranks.example.json`).
 Each rank has a numeric `level`; a player may run any command whose required

@@ -2,11 +2,13 @@
   "$comment": "Copy this file to config/config.json and edit it. Values in .env override the matching fields here (server.host/port/username/version, ai.apiKey/model).",
 
   "server": {
+    "$comment": "auth: 'offline' for cracked/offline-mode servers (username is any name). auth: 'microsoft' for a premium account (username is your Microsoft email; you sign in once via a device code shown in the console, then the token is cached in profilesFolder).",
     "host": "play.example.net",
     "port": 25565,
     "username": "SupportBot",
     "version": false,
-    "auth": "offline"
+    "auth": "offline",
+    "profilesFolder": ".minecraft-auth"
   },
 
   "reconnect": {

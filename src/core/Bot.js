@@ -40,17 +40,41 @@ export default class Bot {
   connect() {
     const s = this.config.server;
     this.manualDisconnect = false;
-    this.logger.info('Bot', `Connecting to ${s.host}:${s.port ?? 25565} as "${s.username}" (offline mode)...`);
+
+    // Auth mode: "offline" for cracked servers, "microsoft" for premium accounts.
+    const authMode = (s.auth ?? 'offline').toLowerCase();
+    this.logger.info('Bot', `Connecting to ${s.host}:${s.port ?? 25565} as "${s.username}" (${authMode} mode)...`);
+
+    // Base options shared by both auth modes.
+    const options = {
+      host: s.host,
+      port: s.port ?? 25565,
+      username: s.username,
+      version: s.version || false, // false = auto-detect
+      auth: authMode === 'microsoft' ? 'microsoft' : 'offline',
+      hideErrors: false
+    };
+
+    if (authMode === 'microsoft') {
+      // Cache the Microsoft auth tokens so we only sign in interactively once.
+      // After the first login, reconnects reuse the cached token silently.
+      options.profilesFolder = s.profilesFolder || '.minecraft-auth';
+
+      // Device-code callback: printed to the console so the operator can sign in.
+      // mineflayer calls this with { user_code, verification_uri, message } the
+      // first time (or when the cached token has expired).
+      options.onMsaCode = (data) => {
+        this.logger.warn('Auth', '======================================================');
+        this.logger.warn('Auth', '  MICROSOFT SIGN-IN REQUIRED');
+        this.logger.warn('Auth', `  1. Open: ${data.verification_uri}`);
+        this.logger.warn('Auth', `  2. Enter code: ${data.user_code}`);
+        this.logger.warn('Auth', '  (this is only needed once; the token is cached)');
+        this.logger.warn('Auth', '======================================================');
+      };
+    }
 
     try {
-      this.mc = mineflayer.createBot({
-        host: s.host,
-        port: s.port ?? 25565,
-        username: s.username,
-        version: s.version || false, // false = auto-detect
-        auth: 'offline', // critical for cracked servers
-        hideErrors: false
-      });
+      this.mc = mineflayer.createBot(options);
     } catch (err) {
       this.logger.error('Bot', 'Failed to create bot:', err.message);
       this.#scheduleReconnect();
